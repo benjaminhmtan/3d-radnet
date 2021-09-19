@@ -72,7 +72,6 @@ def multiclass_performance(y_true,y_pred,label_name=None):
     return total_acc,performance
 
 def multilabel_performance(y_true,y_pred,label_name=None):
-    
 
     labels = np.arange(0,len(y_true[0]),1,dtype=int)
     performance = OrderedDict()

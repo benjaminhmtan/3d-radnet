@@ -6,6 +6,7 @@ import pickle
 import json
 import pandas as pd
 import numpy as np
+from matplotlib import pyplot as plt
 from utils.models import RadNet_resnet3d
 from utils.processing import CenterImage
 
@@ -89,6 +90,8 @@ def Main():
         handle.close()
 
     img_list = list(test_dict.keys())
+    img_list = [img for img in img_list if "TCGA-" in img]
+
 
     # Get Model
     model = RadNet_resnet3d()
@@ -97,6 +100,7 @@ def Main():
 
     # Get Predictions
     pred_dict = {}
+    
     # Run through scans
     for ind in range(len(img_list)):
         print("Loading scans and running network: {} of {}".format(ind+1,len(img_list)),end="\r")
@@ -107,6 +111,16 @@ def Main():
 
         # Format image for input
         img_array = crt_img["img_array"]
+#            img_array = (img_array - np.min(img_array))/(np.max(img_array)-np.min(img_array)).astype("float32")
+        img_array = CenterImage(img_array,(48,192,192)) # fix size with zero padding 
+#            img_array = np.expand_dims(img_array,axis=-1)
+        x_test = np.array([img_array])
+            
+        if ind == 10:
+            for slice in range(48):
+                plt.imshow(x_test[0,slice,:,:], interpolation='nearest')
+                plt.show()
+
         img_array = (img_array - np.min(img_array))/(np.max(img_array)-np.min(img_array)).astype("float32")
         img_array = CenterImage(img_array,(48,192,192)) # fix size with zero padding 
         img_array = np.expand_dims(img_array,axis=-1)
@@ -123,6 +137,9 @@ def Main():
         out_ctrs = {"prediction":list(pred[2][0]),"label":list(y_ctrs)}
         out_body = {"prediction":list(pred[3][0]),"label":list(y_body)}
         pred_dict[img_list[ind]] = [out_seq,out_view,out_ctrs,out_body]
+
+        if ind == 10:
+            print(out_body)
 
     # Save prediction and labels for analysis later
     with open(os.path.join(output_dir,"test_results_dict"),"wb") as handle:
