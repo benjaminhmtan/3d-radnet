@@ -29,14 +29,13 @@ class mlp_1000():
 class cnn3d():
     def __init__(
         self,
-        input_shape=(48,192,192,1),
-        num_channels=1
+        input_shape=(48,192,192)
         ):
 
         self.input_shape = input_shape
-        self.num_channels = 1
+        self.channels = 1
 
-        self.model_input = keras.Input(shape=self.input_shape, name="input_layer")
+        self.model_input = keras.Input(shape=self.input_shape+(self.channels,), name="input_layer")
         self.model_output = self.BuildModel()
 
     def BuildModel(self):

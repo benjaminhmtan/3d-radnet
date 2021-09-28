@@ -131,7 +131,7 @@ def Main():
     y_train_ctrs = np.array([y_train_ctrs])
     y_train_body = np.array([y_train_body])
     
-    x_train = x_train.reshape(len(train_list), 48, 192, 192, 1)
+    x_train = x_train.reshape(len(train_list), 48, 192, 192)
     y_train_seq  = y_train_seq.reshape(len(train_list), 5)
     y_train_view = y_train_view.reshape(len(train_list), 3)
     y_train_ctrs = y_train_ctrs.reshape(len(train_list), 2)
@@ -143,8 +143,9 @@ def Main():
     out_body = keras.layers.Dense(9,activation="sigmoid",name="out_body")
     # out_space = keras.layers.Dense(1,activation="linear",name="out_space")
 
-    model = cnn3d()
-    model = model.GetModel()
+    # model = cnn3d()
+    model = RadNet_resnet3d()
+    # model = model.GetModel()
     model.summary()
 
     model.compile(loss={'out_seq': 'categorical_crossentropy', 'out_view': 'categorical_crossentropy', 'out_ctrs': 'categorical_crossentropy', 'out_body': 'binary_crossentropy'}, optimizer='adam', metrics=['accuracy'])
@@ -195,6 +196,8 @@ def Main():
     with open(os.path.join(output_dir,"test_results_dict"),"wb") as handle:
         pickle.dump(pred_dict,handle)
     print("\nFinished.")
+
+
 
 if __name__=="__main__":
     Main()

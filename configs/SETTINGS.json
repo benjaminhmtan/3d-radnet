@@ -3,5 +3,9 @@
     "TEST_DIR":     "./test_data/",
     "TRAIN_LABEL":  "./train_data/labels_dict_train",
     "TEST_LABEL":   "./test_data/labels_dict_test",
-    "OUTPUT_DIR":   "./outputs"
+    "OUTPUT_DIR":   "./outputs",
+    "TRAIN_CLINICAL": "./clinical_train.tsv",
+    "TEST_CLINICAL": "./clinical_test.tsv",
+    "ALT_TRAIN_LABEL": "./label_train.csv",
+    "ALT_TEST_LABEL": "./label_test.csv"
 }
