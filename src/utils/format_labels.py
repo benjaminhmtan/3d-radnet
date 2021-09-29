@@ -60,3 +60,34 @@ def format_contrast_label(labels):
     lab = np.zeros(2, dtype="uint8")
     lab[labels] = 1
     return lab
+
+def format_stage_label(label):
+    lab = np.zeros(13, dtype="uint8")
+    if 'Stage I' == label:
+        lab[0] = 1
+    if 'Stage IA' == label:
+        lab[1] = 1
+    if 'Stage IB' == label:
+        lab[2] = 1
+    if 'Stage II' == label:
+        lab[3] = 1
+    if 'Stage IIA' == label:
+        lab[4] = 1
+    if 'Stage IIB' == label:
+        lab[5] = 1
+    if 'Stage III' == label:
+        lab[6] = 1
+    if 'Stage IIIA' == label:
+        lab[7] = 1
+    if 'Stage IIIB' == label:
+        lab[8] = 1
+    if 'Stage IIIC' == label:
+        lab[9] = 1
+    if 'Stage IV' == label:
+        lab[10] = 1
+    if 'Stage IVA' == label:
+        lab[11] = 1
+    if 'Stage IVB' == label:
+        lab[12] = 1
+    
+    return lab

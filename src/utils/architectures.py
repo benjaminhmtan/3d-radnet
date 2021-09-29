@@ -1,38 +1,47 @@
 import tensorflow as tf
 from tensorflow import keras
+from networks import ResNet3D
 
-class mlp_1000():
+class MLP():
     def __init__(
         self,
+        output_layers,
         input_shape=(48,192,192)
         ):
 
         self.input_shape = input_shape
+        self.output_layers = output_layers
 
         self.model_input = keras.Input(shape=self.input_shape, name="input_layer")
         self.model_output = self.BuildModel()
 
     def BuildModel(self):
         x = keras.layers.Flatten()(self.model_input)
-        x = keras.layers.Dense(1000, activation='relu')(x)
+        x = keras.layers.Dense(750, activation='relu')(x)
 
-        out_seq   = keras.layers.Dense(5,activation="softmax",name="out_seq")(x)
-        out_view  = keras.layers.Dense(3,activation="softmax",name="out_view")(x)
-        out_ctrs  = keras.layers.Dense(2,activation="softmax",name="out_ctrs")(x)
-        out_body  = keras.layers.Dense(9,activation="sigmoid",name="out_body")(x)
+        out_list = []
+        for idx in range(len(self.output_layers)):
+            x_out = self.output_layers[idx](x)
+            out_list.append(x_out)
+            # out_seq   = keras.layers.Dense(5,activation="softmax",name="out_seq")(x)
+            # out_view  = keras.layers.Dense(3,activation="softmax",name="out_view")(x)
+            # out_ctrs  = keras.layers.Dense(2,activation="softmax",name="out_ctrs")(x)
+            # out_body  = keras.layers.Dense(9,activation="sigmoid",name="out_body")(x)
 
-        return [out_seq, out_view, out_ctrs, out_body]
+        return out_list
 
     def GetModel(self):
         return tf.keras.Model(inputs=self.model_input,outputs=self.model_output)
 
-class cnn3d():
+class CNN3D():
     def __init__(
         self,
+        output_layers,
         input_shape=(48,192,192)
         ):
 
         self.input_shape = input_shape
+        self.output_layers = output_layers
         self.channels = 1
 
         self.model_input = keras.Input(shape=self.input_shape+(self.channels,), name="input_layer")
@@ -57,12 +66,32 @@ class cnn3d():
         x = keras.layers.Flatten()(x)
         x = keras.layers.Dense(1000, activation="relu", name="last")(x)
 
-        out_seq   = keras.layers.Dense(5,activation="softmax",name="out_seq")(x)
-        out_view  = keras.layers.Dense(3,activation="softmax",name="out_view")(x)
-        out_ctrs  = keras.layers.Dense(2,activation="softmax",name="out_ctrs")(x)
-        out_body  = keras.layers.Dense(9,activation="sigmoid",name="out_body")(x)
+        out_list = []
+        for idx in range(len(self.output_layers)):
+            x_out = self.output_layers[idx](x)
+            out_list.append(x_out)
 
-        return [out_seq, out_view, out_ctrs, out_body]
+        # out_seq   = keras.layers.Dense(5,activation="softmax",name="out_seq")(x)
+        # out_view  = keras.layers.Dense(3,activation="softmax",name="out_view")(x)
+        # out_ctrs  = keras.layers.Dense(2,activation="softmax",name="out_ctrs")(x)
+        # out_body  = keras.layers.Dense(9,activation="sigmoid",name="out_body")(x)
+
+        return out_list
 
     def GetModel(self):
         return tf.keras.Model(inputs=self.model_input,outputs=self.model_output)
+
+def mlp(output_layers, input_shape=(48,192,192)):
+    NET = MLP(input_shape=input_shape,output_layers=output_layers)
+
+    return NET.GetModel()
+
+def cnn3d(output_layers, input_shape=(48,192,192)):
+    NET = CNN3D(input_shape=input_shape,output_layers=output_layers)
+
+    return NET.GetModel()
+
+def resnet3d(output_layers, input_shape=(48,192,192)):
+    NET = ResNet3D(input_shape=input_shape,output_layers=output_layers)
+
+    return NET.GetModel()
