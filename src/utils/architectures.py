@@ -76,7 +76,7 @@ class CNN3D():
         self.output_layers = output_layers
         self.channels = 1
 
-        self.model_input = keras.Input(shape=self.input_shape+(self.channels,), name="input_layer")
+        self.model_input = keras.Input(shape=[*self.input_shape,self.channels], name="input_layer")
         self.model_output = self.BuildModel()
 
     def BuildModel(self):
@@ -96,7 +96,7 @@ class CNN3D():
         x = keras.layers.MaxPool3D(pool_size=(2,2,2), padding="valid", name="pool3")(x)
 
         x = keras.layers.Flatten()(x)
-        x = keras.layers.Dense(1000, activation="relu", name="last")(x)
+        x = keras.layers.Dense(2048, activation="relu", name="last")(x)
 
         out_list = []
         for idx in range(len(self.output_layers)):
@@ -124,44 +124,53 @@ class VGG3D():
         self.output_layers = output_layers
         self.channels = 1
 
-        self.model_input = keras.Input(shape=self.input_shape+(self.channels,), name="input_layer")
+        self.model_input = keras.Input(shape=[*self.input_shape,self.channels], name="input_layer")
         self.model_output = self.BuildModel()
 
     def BuildModel(self):
-        x = keras.layers.Conv3D(filters=32, kernel_size=(3,3,3), strides=(1,1,1), padding="same", name="conv1-1", activation=None)(self.model_input)
+        x = keras.layers.Conv3D(filters=16, kernel_size=(3,3,3), strides=(1,1,1), padding="same", name="conv1-1", activation=None)(self.model_input)
         x = keras.layers.BatchNormalization(name="bn1-1")(x)
         x = keras.layers.ReLU(name="relu1-1")(x)
-        x = keras.layers.Conv3D(filters=32, kernel_size=(3,3,3), strides=(1,1,1), padding="same", name="conv1-2", activation=None)(self.model_input)
-        x = keras.layers.BatchNormalization(name="bn1-2")(x)
-        x = keras.layers.ReLU(name="relu1-2")(x)
+        # x = keras.layers.Conv3D(filters=16, kernel_size=(3,3,3), strides=(1,1,1), padding="same", name="conv1-2", activation=None)(self.model_input)
+        # x = keras.layers.BatchNormalization(name="bn1-2")(x)
+        # x = keras.layers.ReLU(name="relu1-2")(x)
         x = keras.layers.MaxPool3D(pool_size=(2,2,2), padding="valid", name="pool1")(x)
 
-        x = keras.layers.Conv3D(filters=64, kernel_size=(3,3,3), strides=(1,1,1), padding="same", name="conv2-1", activation=None)(x)
+        x = keras.layers.Conv3D(filters=32, kernel_size=(3,3,3), strides=(1,1,1), padding="same", name="conv2-1", activation=None)(x)
         x = keras.layers.BatchNormalization(name="bn2-1")(x)
         x = keras.layers.ReLU(name="relu2-1")(x)
-        x = keras.layers.Conv3D(filters=64, kernel_size=(3,3,3), strides=(1,1,1), padding="same", name="conv2-2", activation=None)(x)
-        x = keras.layers.BatchNormalization(name="bn2-2")(x)
-        x = keras.layers.ReLU(name="relu2-2")(x)
+        # x = keras.layers.Conv3D(filters=32, kernel_size=(3,3,3), strides=(1,1,1), padding="same", name="conv2-2", activation=None)(x)
+        # x = keras.layers.BatchNormalization(name="bn2-2")(x)
+        # x = keras.layers.ReLU(name="relu2-2")(x)
         x = keras.layers.MaxPool3D(pool_size=(2,2,2), padding="valid", name="pool2")(x)
 
-        x = keras.layers.Conv3D(filters=128, kernel_size=(3,3,3), strides=(1,1,1), padding="same", name="conv3-1", activation=None)(x)
+        x = keras.layers.Conv3D(filters=64, kernel_size=(3,3,3), strides=(1,1,1), padding="same", name="conv3-1", activation=None)(x)
         x = keras.layers.BatchNormalization(name="bn3-1")(x)
         x = keras.layers.ReLU(name="relu3-1")(x)
-        x = keras.layers.Conv3D(filters=128, kernel_size=(3,3,3), strides=(1,1,1), padding="same", name="conv3-2", activation=None)(x)
+        x = keras.layers.Conv3D(filters=64, kernel_size=(3,3,3), strides=(1,1,1), padding="same", name="conv3-2", activation=None)(x)
         x = keras.layers.BatchNormalization(name="bn3-2")(x)
         x = keras.layers.ReLU(name="relu3-2")(x)
         x = keras.layers.MaxPool3D(pool_size=(2,2,2), padding="valid", name="pool3")(x)
 
-        x = keras.layers.Conv3D(filters=256, kernel_size=(3,3,3), strides=(1,1,1), padding="same", name="conv4-1", activation=None)(x)
+        x = keras.layers.Conv3D(filters=128, kernel_size=(3,3,3), strides=(1,1,1), padding="same", name="conv4-1", activation=None)(x)
         x = keras.layers.BatchNormalization(name="bn4-1")(x)
         x = keras.layers.ReLU(name="relu4-1")(x)
-        x = keras.layers.Conv3D(filters=256, kernel_size=(3,3,3), strides=(1,1,1), padding="same", name="conv4-2", activation=None)(x)
+        x = keras.layers.Conv3D(filters=128, kernel_size=(3,3,3), strides=(1,1,1), padding="same", name="conv4-2", activation=None)(x)
         x = keras.layers.BatchNormalization(name="bn4-2")(x)
         x = keras.layers.ReLU(name="relu4-2")(x)
         x = keras.layers.MaxPool3D(pool_size=(2,2,2), padding="valid", name="pool4")(x)
 
+        x = keras.layers.Conv3D(filters=256, kernel_size=(3,3,3), strides=(1,1,1), padding="same", name="conv5-1", activation=None)(x)
+        x = keras.layers.BatchNormalization(name="bn5-1")(x)
+        x = keras.layers.ReLU(name="relu5-1")(x)
+        x = keras.layers.Conv3D(filters=256, kernel_size=(3,3,3), strides=(1,1,1), padding="same", name="conv5-2", activation=None)(x)
+        x = keras.layers.BatchNormalization(name="bn5-2")(x)
+        x = keras.layers.ReLU(name="relu5-2")(x)
+        x = keras.layers.MaxPool3D(pool_size=(1,2,2), padding="valid", name="pool5")(x)
+
         x = keras.layers.Flatten()(x)
-        x = keras.layers.Dense(4096, activation="relu", name="last")(x)
+        x = keras.layers.Dense(2048, activation="relu", name="last-1")(x)
+        x = keras.layers.Dense(2048, activation="relu", name="last-2")(x)
 
         out_list = []
         for idx in range(len(self.output_layers)):

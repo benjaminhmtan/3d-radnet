@@ -91,3 +91,63 @@ def format_stage_label(label):
         lab[12] = 1
     
     return lab
+
+def format_alt_stage_label(label):
+    lab = np.zeros(4, dtype="uint8")
+    if 'Stage I' == label:
+        lab[0] = 1
+    if 'Stage IA' == label:
+        lab[0] = 1
+    if 'Stage IB' == label:
+        lab[0] = 1
+    if 'Stage II' == label:
+        lab[1] = 1
+    if 'Stage IIA' == label:
+        lab[1] = 1
+    if 'Stage IIB' == label:
+        lab[1] = 1
+    if 'Stage III' == label:
+        lab[2] = 1
+    if 'Stage IIIA' == label:
+        lab[2] = 1
+    if 'Stage IIIB' == label:
+        lab[2] = 1
+    if 'Stage IIIC' == label:
+        lab[2] = 1
+    if 'Stage IV' == label:
+        lab[3] = 1
+    if 'Stage IVA' == label:
+        lab[3] = 1
+    if 'Stage IVB' == label:
+        lab[3] = 1
+    
+    return lab
+
+def format_project_label(label):
+    lab = np.zeros(12, dtype="uint8")
+    if 'BLCA' in label:
+        lab[0] = 1
+    if 'BRCA' in label:
+        lab[1] = 1
+    if 'COAD' in label:
+        lab[2] = 1
+    if 'ESCA' in label:
+        lab[3] = 1
+    if 'HNSC' in label:
+        lab[4] = 1
+    if 'KICH' in label:
+        lab[5] = 1
+    if 'KIRC' in label:
+        lab[6] = 1
+    if 'KIRP' in label:
+        lab[7] = 1
+    if 'LIHC' in label:
+        lab[8] = 1
+    if 'LUAD' in label:
+        lab[9] = 1
+    if 'LUSC' in label:
+        lab[10] = 1
+    if 'STAD' in label:
+        lab[11] = 1
+    
+    return lab
